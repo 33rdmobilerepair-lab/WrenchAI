@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>WrenchAI — Mechanic-grade car diagnosis</title>
+  <meta name="description" content="Get fast, reliable mechanic diagnostics from your phone. Upload photos, videos or describe symptoms.">
+  <style>
+    :root{
+      --bg:#111217; --accent:#F5B400; --muted:#6B7280; --card:#15161a; --text:#e6e7e9;
+    }
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial;}
+    body{background:linear-gradient(180deg,#0b0b0d 0%, #131316 100%); color:var(--text); -webkit-font-smoothing:antialiased;}
+    .container{max-width:980px;margin:28px auto;padding:20px;}
+    header{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+    .logo{display:flex;align-items:center;gap:8px}
+    .logo svg{height:44px}
+    h1{font-size:22px;margin:0}
+    p.lead{color:var(--muted);margin:6px 0 18px}
+    .grid{display:grid;grid-template-columns:1fr 360px;gap:18px}
+    @media(max-width:880px){.grid{grid-template-columns:1fr} .sidebar{order:2}}
+    .card{background:var(--card);border-radius:12px;padding:18px;box-shadow:0 6px 18px rgba(0,0,0,.6);}
+    form .row{display:flex;gap:8px;margin-bottom:10px}
+    label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+    input[type="text"],textarea{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,.06);background:transparent;color:var(--text);resize:vertical}
+    textarea{min-height:88px}
+    .file{display:flex;gap:8px;align-items:center}
+    .btn{background:var(--accent);color:#111;padding:10px 14px;border-radius:10px;border:0;font-weight:700;cursor:pointer}
+    .btn.secondary{background:transparent;border:1px solid rgba(255,255,255,.06);color:var(--text)}
+    .results{margin-top:12px}
+    .result-item{background:#0f1113;border-radius:10px;padding:12px;margin-bottom:10px}
+    .small{font-size:13px;color:var(--muted)}
+    .affiliate-list{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+    .affiliate-btn{background:transparent;border:1px solid rgba(255,255,255,.06);padding:8px;border-radius:8px;text-decoration:none;color:var(--text);display:flex;justify-content:space-between;align-items:center}
+    footer{margin-top:22px;color:var(--muted);font-size:13px;text-align:center}
+    .badge{display:inline-block;padding:6px 8px;border-radius:8px;background:rgba(245,180,0,.08);color:var(--accent);font-weight:700;margin-right:8px;font-size:12px}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">
+        <!-- Inline SVG logo -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="160" height="44" viewBox="0 0 200 60" role="img" aria-label="WrenchAI">
+          <rect width="200" height="60" rx="8" fill="#111217"/>
+          <text x="16" y="36" font-family="Arial, sans-serif" font-size="18" fill="#F5B400" font-weight="700">Wrench</text>
+          <text x="92" y="36" font-family="Arial, sans-serif" font-size="18" fill="#FFFFFF">AI</text>
+          <path d="M150 18 L170 18 L176 24 L162 38 L156 32 L172 16" fill="#F5B400"/>
+        </svg>
+      </div>
+      <div>
+        <h1>Mechanic-grade car diagnosis — fast</h1>
+        <p class="lead">Describe the symptom or upload a short video. Get likely causes, urgency, price ranges, and recommended parts with links.</p>
+      </div>
+    </header>
+
+    <main class="grid">
+      <section>
+        <div class="card">
+          <form id="diagForm">
+            <label for="symptom">Describe the symptom (e.g. "shakes at 60 mph", "clunk when turning")</label>
+            <textarea id="symptom" placeholder="Type symptoms, include when it happens, noises, smells, lights..."></textarea>
+
+            <div style="display:flex;gap:8px;margin-top:8px;">
+              <div style="flex:1">
+                <label>Upload photo or short video (optional)</label>
+                <input type="file" id="media" accept="image/*,video/*">
+                <p class="small">Tip: short videos (5–20s) of the noise are extremely helpful.</p>
+              </div>
+              <div style="width:120px;">
+                <label>Car info (optional)</label>
+                <input type="text" id="carinfo" placeholder="2012 Honda Civic">
+              </div>
+            </div>
+
+            <div style="display:flex;gap:10px;margin-top:12px;align-items:center;">
+              <button class="btn" id="submitBtn" type="button">Get Free Diagnosis</button>
+              <button class="btn secondary" id="proBtn" type="button">Buy Pro Report $4.99</button>
+              <div style="margin-left:auto" class="small">Estimated time: <strong id="estTime">~1–2 min</strong></div>
+            </div>
+          </form>
+
+          <div id="results" class="results" aria-live="polite"></div>
+        </div>
+
+        <div style="height:18px"></div>
+
+        <div class="card">
+          <h3 style="margin-top:0">How it works</h3>
+          <p class="small">WrenchAI uses mechanic-verified diagnostic flows to give likely causes, severity, cost ranges, and parts suggestions. We suggest parts using affiliate links — you can buy directly and save on labor.</p>
+          <ul class="small">
+            <li>Free diagnosis gives 1–2 likely causes + urgency</li>
+            <li>Pro report ($4.99) includes full step-by-step checks and printable checklist</li>
+            <li>We never upsell repairs — just trusted info</li>
+          </ul>
+        </div>
+      </section>
+
+      <aside class="sidebar">
+        <div class="card">
+          <div class="badge">Certified</div><div style="display:inline-block">Pro mechanic author</div>
+          <hr style="border:none;height:1px;background:rgba(255,255,255,.04);margin:12px 0">
+          <h4 style="margin:0 0 8px 0">Popular quick checks</h4>
+          <ol class="small">
+            <li>Check oil level & color</li>
+            <li>Listen for clicks while turning</li>
+            <li>Test brakes at low speed</li>
+            <li>Note smoke color on startup</li>
+          </ol>
+          <hr style="border:none;height:1px;background:rgba(255,255,255,.04);margin:12px 0">
+          <h4 style="margin:0 0 8px 0">Affiliate picks</h4>
+          <div class="affiliate-list" id="affiliateList">
+            <!-- Dynamically filled -->
+          </div>
+        </div>
+
+        <div style="height:12px"></div>
+
+        <div class="card small">
+          <strong>Monetize tip:</strong> Add your affiliate link to recommended parts. Users often buy recommended filters, sensors or scanners.
+        </div>
+      </aside>
+    </main>
+
+    <footer>
+      <p>© <span id="year"></span> WrenchAI • Privacy • Terms • Built for mechanics</p>
+    </footer>
+  </div>
+
+<script>
+  document.getElementById('year').innerText = new Date().getFullYear();
+  const affiliateList = document.getElementById('affiliateList');
+
+  // Placeholder affiliate items (replace href with your affiliate links)
+  const affiliates = [
+    {title: 'OBD2 Scanner (recommended)', price: '$35', href: 'https://www.example.com/aff-obd2'},
+    {title: 'Brake Pad Set — common sizes', price: '$45', href: 'https://www.example.com/aff-brake'},
+    {title: 'Engine Oil 5W-30 (full synthetic)', price: '$28', href: 'https://www.example.com/aff-oil'}
+  ];
+
+  affiliates.forEach(a=>{
+    const el = document.createElement('a');
+    el.className = 'affiliate-btn';
+    el.href = a.href;
+    el.target = '_blank';
+    el.rel = 'noopener noreferrer';
+    el.innerHTML = `<span>${a.title}</span><span class="small">${a.price}</span>`;
+    affiliateList.appendChild(el);
+  });
+
+  // Form handling
+  const submitBtn = document.getElementById('submitBtn');
+  const proBtn = document.getElementById('proBtn');
+  const results = document.getElementById('results');
+
+  submitBtn.addEventListener('click', async () => {
+    const symptom = document.getElementById('symptom').value.trim();
+    const carinfo = document.getElementById('carinfo').value.trim();
+    const media = document.getElementById('media').files[0];
+
+    if(!symptom) { alert('Describe the symptom — even one sentence helps.'); return; }
+
+    // disable
+    submitBtn.disabled = true;
+    submitBtn.innerText = 'Diagnosing...';
+
+    // Upload media if present (simple approach: send as FormData to backend)
+    const form = new FormData();
+    form.append('symptom', symptom);
+    form.append('carinfo', carinfo);
+    if(media) form.append('media', media);
+
+    try {
+      const res = await fetch('/api/diagnose', {
+        method: 'POST',
+        body: form
+      });
+      if(!res.ok) throw new Error('Server error');
+
+      const data = await res.json();
+      renderResults(data);
+    } catch(err) {
+      console.error(err);
+      results.innerHTML = `<div class="result-item"><strong>Sorry — diagnosis failed.</strong><div class="small">Try again or buy the Pro Report for a guaranteed manual review.</div></div>`;
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.innerText = 'Get Free Diagnosis';
+    }
+  });
+
+  proBtn.addEventListener('click', ()=>{
+    // Replace with Stripe checkout or Gumroad link
+    window.open('https://www.example.com/buy-pro-report','_blank');
+  });
+
+  function renderResults(data){
+    // Expected data shape: {symptom, carinfo, diagnoses:[{probability,label,reason,costLow,costHigh,parts:[{title,link,price}]}], urgency, followup}
+    results.innerHTML = '';
+    const header = document.createElement('div');
+    header.className = 'result-item';
+    header.innerHTML = `<strong>Likely causes</strong><div class="small">Based on your description</div>`;
+    results.appendChild(header);
+
+    (data.diagnoses || []).forEach(d=>{
+      const el = document.createElement('div');
+      el.className = 'result-item';
+      el.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center">
+        <div><strong>${d.label}</strong> <div class="small">${d.reason}</div></div>
+        <div style="text-align:right"><div class="small">Chance: ${(d.probability*100).toFixed(0)}%</div><div><strong>${d.costLow}–${d.costHigh}</strong></div></div>
+      </div>`;
+      // parts
+      if(d.parts && d.parts.length){
+        const partWrap = document.createElement('div');
+        partWrap.style.marginTop = '8px';
+        partWrap.className = 'small';
+        partWrap.innerHTML = '<div class="small">Recommended parts:</div>';
+        d.parts.forEach(p=>{
+          const a = document.createElement('a');
+          a.href = p.link || '#';
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+          a.className = 'affiliate-btn';
+          a.style.marginTop='6px';
+          a.innerHTML = `<span>${p.title}</span><span class="small">${p.price || ''}</span>`;
+          partWrap.appendChild(a);
+        });
+        el.appendChild(partWrap);
+      }
+
+      results.appendChild(el);
+    });
+
+    // urgency / CTA
+    const urgencyEl = document.createElement('div');
+    urgencyEl.className = 'result-item small';
+    urgencyEl.innerHTML = `<strong>Urgency:</strong> ${data.urgency || 'Low' }<div style="margin-top:6px">${data.followup || ''}</div>`;
+    results.appendChild(urgencyEl);
+  }
+</script>
+</body>
+</html>
